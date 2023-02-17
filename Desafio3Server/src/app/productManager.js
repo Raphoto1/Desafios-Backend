@@ -1,4 +1,5 @@
-const fs = require("fs");
+import fs from "fs"
+
 
 class ProductManager {
   #path = "./prods.json";
@@ -70,6 +71,21 @@ class ProductManager {
       return idFound;
     } else {
       console.log(`el id ${id} solicitado no existe`);
+    }
+  }
+
+  async getProductByCode(code) {
+    const products = await this.getProducts();
+    const chkProductId = await this.chkProdsById(products, code);
+    if (chkProductId) {
+      const codeFound = await products.find((prod) => prod.code === code);
+      console.log(
+        `producto con el id ${code} encontrado, se mostrara a continuacion`
+      );
+      console.log(codeFound);
+      return codeFound;
+    } else {
+      console.log(`el codigo ${code} solicitado no existe`);
     }
   }
 
@@ -164,21 +180,5 @@ class ProductManager {
   }
 }
 
-async function test() {
-  //productos vacio
-  const item = new ProductManager();
-  await item.getProducts();
+export default(ProductManager);
 
-  // //se agrega un producto
-  await item.addProduct(1, "casa", "blabla", 1200, "#.jpg", 2);
-  // //se agrega segundo producto
-  await item.addProduct(2, "carro", "blabla2", 10200, "#.jpg", 3);
-  //se agrega tercer producto
-  await item.addProduct(3, "moto", "blabla3", 200, "#.jpg", 10);
-  //se agrega cuarto producto
-  await item.addProduct(4, "barco", "blabla4", 500, "#.jpg", 3);
-  await item.getProductById(0);
-  // await item.updateProdById(1, "title", "rafa");
-//   await item.deleteProdById(1);
-}
-test();

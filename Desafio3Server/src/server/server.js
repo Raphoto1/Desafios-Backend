@@ -8,9 +8,16 @@ const app = express();
 
 //lista de max 3 items
 app.get("/products", async (req,res) => {
+    const {limit} = req.query;
+
+    if(!limit){
+       const prods = await item.getProducts(); 
+       await res.send(prods);
+    }
+    //envia el filtrado de el numero de datos
     const prods = await item.getProducts();
-    //respuesta
-    await res.send(prods);
+    const filtered = prods.splice(0,limit);
+    await res.send(filtered);
 });
 
 //segun el id
