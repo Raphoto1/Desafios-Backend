@@ -9,13 +9,11 @@ const app = express();
 //lista de max 3 items
 app.get("/products", async (req,res) => {
     const {limit} = req.query;
-
+    const prods = await item.getProducts(); 
     if(!limit){
-       const prods = await item.getProducts(); 
        await res.send(prods);
     }
     //envia el filtrado de el numero de datos
-    const prods = await item.getProducts();
     const filtered = prods.splice(0,limit);
     await res.send(filtered);
 });

@@ -1,11 +1,10 @@
-import fs from "fs"
-
+import fs from "fs";
 
 class ProductManager {
   #path = "./prods.json";
   idAcum = 0;
   constructor(path) {
-    path = this.#path
+    path = this.#path;
   }
 
   async getProducts() {
@@ -30,10 +29,10 @@ class ProductManager {
   async addProduct(code, title, description, price, thumbnail, stock) {
     //revisar que si esten todos los datos
     if (code && title && description && price && thumbnail && stock) {
-      console.log(await "info completa gracias");
+      console.log("info completa gracias");
     } else {
       console.log(
-        await `falta informacion para este item, 
+        `falta informacion para este item, 
           recuerde agregar todos los campos:
           code || title || description || price || thumbnail || stock`
       );
@@ -98,11 +97,11 @@ class ProductManager {
         console.log(toDelete);
         await fs.promises.writeFile(this.#path, JSON.stringify(toDelete));
         console.log(`producto con id ${id} eliminado`);
-      } else{
+      } else {
         console.log("no se borrara por falta de id");
       }
     } catch (error) {
-        console.log("error al borrar");
+      console.log("error al borrar");
     }
   }
 
@@ -115,70 +114,103 @@ class ProductManager {
       if (chkId) {
         console.log("se actualizan los datos");
         switch (keyToUpdate) {
-            case "code":
-              const updateCode = await products.map((e) =>
-                e.id === id ? { ...e, code: dataUpdate } : e
-              );
-              await fs.promises.writeFile(this.#path, JSON.stringify(updateCode));
-              console.log(`elemento con id ${id} modifico el codigo`);
-              await this.getProducts();
-              break;
-      
-              case "title":
-              const updateTitle = await products.map((e) =>
-                e.id === id ? { ...e, title: dataUpdate } : e
-              );
-              await fs.promises.writeFile(this.#path, JSON.stringify(updateTitle));
-              console.log(`elemento con id ${id} modifico el title`);
-              await this.getProducts();
-              break;
-      
-              case "description":
-              const updateDesc = await products.map((e) =>
-                e.id === id ? { ...e, description: dataUpdate } : e
-              );
-              await fs.promises.writeFile(this.#path, JSON.stringify(updateDesc));
-              console.log(`elemento con id ${id} modifico el description`);
-              await this.getProducts();
-              break;
-      
-              case "price":
-              const updatePrice = await products.map((e) =>
-                e.id === id ? { ...e, price: dataUpdate } : e
-              );
-              await fs.promises.writeFile(this.#path, JSON.stringify(updatePrice));
-              console.log(`elemento con id ${id} modifico el description`);
-              await this.getProducts();
-              break;
-      
-              case "thumnail":
-              const updateThumb = await products.map((e) =>
-                e.id === id ? { ...e, thumnail: dataUpdate } : e
-              );
-              await fs.promises.writeFile(this.#path, JSON.stringify(updateThumb));
-              console.log(`elemento con id ${id} modifico el Thumnail`);
-              await this.getProducts();
-              break;
-      
-              case "stock":
-              const updateStock = await products.map((e) =>
-                e.id === id ? { ...e, stock: dataUpdate } : e
-              );
-              await fs.promises.writeFile(this.#path, JSON.stringify(updateStock));
-              console.log(`elemento con id ${id} modifico el Stock`);
-              await this.getProducts();
-              break;
-      
-            default:
-              console.log("no se encontró el atributo del producto con el id");
-              break;
-          }
+          case "code":
+            const updateCode = await products.map((e) =>
+              e.id === id ? { ...e, code: dataUpdate } : e
+            );
+            await fs.promises.writeFile(this.#path, JSON.stringify(updateCode));
+            console.log(`elemento con id ${id} modifico el codigo`);
+            await this.getProducts();
+            break;
+
+          case "title":
+            const updateTitle = await products.map((e) =>
+              e.id === id ? { ...e, title: dataUpdate } : e
+            );
+            await fs.promises.writeFile(
+              this.#path,
+              JSON.stringify(updateTitle)
+            );
+            console.log(`elemento con id ${id} modifico el title`);
+            await this.getProducts();
+            break;
+
+          case "description":
+            const updateDesc = await products.map((e) =>
+              e.id === id ? { ...e, description: dataUpdate } : e
+            );
+            await fs.promises.writeFile(this.#path, JSON.stringify(updateDesc));
+            console.log(`elemento con id ${id} modifico el description`);
+            await this.getProducts();
+            break;
+
+          case "price":
+            const updatePrice = await products.map((e) =>
+              e.id === id ? { ...e, price: dataUpdate } : e
+            );
+            await fs.promises.writeFile(
+              this.#path,
+              JSON.stringify(updatePrice)
+            );
+            console.log(`elemento con id ${id} modifico el description`);
+            await this.getProducts();
+            break;
+
+          case "thumnail":
+            const updateThumb = await products.map((e) =>
+              e.id === id ? { ...e, thumnail: dataUpdate } : e
+            );
+            await fs.promises.writeFile(
+              this.#path,
+              JSON.stringify(updateThumb)
+            );
+            console.log(`elemento con id ${id} modifico el Thumnail`);
+            await this.getProducts();
+            break;
+
+          case "stock":
+            const updateStock = await products.map((e) =>
+              e.id === id ? { ...e, stock: dataUpdate } : e
+            );
+            await fs.promises.writeFile(
+              this.#path,
+              JSON.stringify(updateStock)
+            );
+            console.log(`elemento con id ${id} modifico el Stock`);
+            await this.getProducts();
+            break;
+
+          default:
+            console.log("no se encontró el atributo del producto con el id");
+            break;
+        }
       } else {
         console.log(`el id ${id} no existe y no se actualizaran los datos`);
       }
     }
   }
+
+  async updateProdIdTest(id, keyToUpdate, dataUpdate) {
+    if (!id || !keyToUpdate || !dataUpdate) {
+      console.log("falta Información");
+    } else {
+      const products = await this.getProducts();
+      const chkId = this.chkProdsById(products, id);
+      if (chkId) {
+        console.log("se actualizan los datos");
+        const products = await this.getProducts();
+        const update = await products.map((e) =>
+          e.id === id ? { ...e, [keyToUpdate]: dataUpdate } : e
+        );
+        // await fs.promises.writeFile(this.#path, JSON.stringify(update));
+
+        console.log(`elemento con id ${id} modifico el parametro ${keyToUpdate} con ${dataUpdate}`);
+        await this.getProducts();
+      } else {
+        console.log(`el producto con id ${id} no existe o alguno de los datos es erroneo y no se actualizaran los datos`);
+      }
+    }
+  }
 }
 
-export default(ProductManager);
-
+export default ProductManager;
