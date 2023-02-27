@@ -198,12 +198,10 @@ class ProductManager {
       const chkId = this.chkProdsById(products, id);
       if (chkId) {
         console.log("se actualizan los datos");
-        const products = await this.getProducts();
         const update = await products.map((e) =>
           e.id === id ? { ...e, [keyToUpdate]: dataUpdate } : e
         );
-        // await fs.promises.writeFile(this.#path, JSON.stringify(update));
-
+        await fs.promises.writeFile(this.#path, JSON.stringify(update));
         console.log(`elemento con id ${id} modifico el parametro ${keyToUpdate} con ${dataUpdate}`);
         await this.getProducts();
       } else {

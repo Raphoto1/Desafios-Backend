@@ -192,19 +192,17 @@ class ProductManager {
       console.log("falta Información");
     } else {
       const products = await this.getProducts();
-      const chkId = await this.chkProdsById(products, id);
+      const chkId = this.chkProdsById(products, id);
       if (chkId) {
-        console.log("Id existe, se actualizara");
-        //revisar este filtro
-        if (keyToUpdate === "title", "description", "price", "thumbnail", "stock") {
-          console.log("seactualiza");
-        } else {
-          console.log("no se actualiza");
-        }
-      } else {
-        console.log(
-          `el producto con id ${id} no existe o alguno de los datos es erroneo y no se actualizaran los datos`
+        console.log("se actualizan los datos");
+        const update = await products.map((e) =>
+          e.id === id ? { ...e, [keyToUpdate]: dataUpdate } : e
         );
+        await fs.promises.writeFile(this.#path, JSON.stringify(update));
+        console.log(`elemento con id ${id} modifico el parametro ${keyToUpdate} con ${dataUpdate}`);
+        await this.getProducts();
+      } else {
+        console.log(`el producto con id ${id} no existe o alguno de los datos es erroneo y no se actualizaran los datos`);
       }
     }
   }
